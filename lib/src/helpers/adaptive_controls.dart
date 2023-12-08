@@ -11,7 +11,10 @@ class AdaptiveControls extends StatelessWidget {
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
-        return const MaterialControls();
+
+        //HACK: Changed from MaterialControls to MaterialDesktopControls
+
+        return const MaterialDesktopControls();
 
       case TargetPlatform.macOS:
       case TargetPlatform.windows:

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math; //HACK: Added math pacakge
 
 import 'package:chewie/src/animated_play_pause.dart';
 import 'package:chewie/src/center_play_button.dart';
@@ -326,38 +327,115 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
     );
   }
 
+// HACK: 1. Custom Modified of Chewie Started
+
+  void _skipBack() {
+    _cancelAndRestartTimer();
+    final beginning = Duration.zero.inMilliseconds;
+    final skip =
+        (_latestValue.position - const Duration(seconds: 10)).inMilliseconds;
+    controller.seekTo(Duration(milliseconds: math.max(skip, beginning)));
+  }
+
+  void _skipForward() {
+    _cancelAndRestartTimer();
+    final end = _latestValue.duration.inMilliseconds;
+    final skip =
+        (_latestValue.position + const Duration(seconds: 10)).inMilliseconds;
+    controller.seekTo(Duration(milliseconds: math.min(skip, end)));
+  }
+  // HACK: 1. Custom Modified of Chewie Completed
+
   Widget _buildHitArea() {
     final bool isFinished = _latestValue.position >= _latestValue.duration;
     final bool showPlayButton =
         widget.showPlayButton && !_dragging && !notifier.hideStuff;
 
-    return GestureDetector(
-      onTap: () {
-        if (_latestValue.isPlaying) {
-          if (_displayTapped) {
-            setState(() {
-              notifier.hideStuff = true;
-            });
-          } else {
-            _cancelAndRestartTimer();
-          }
-        } else {
-          _playPause();
+// HACK: 2. Widget Changed to Row and added Buttons Started
 
-          setState(() {
-            notifier.hideStuff = true;
-          });
-        }
-      },
-      child: CenterPlayButton(
-        backgroundColor: Colors.black54,
-        iconColor: Colors.white,
-        isFinished: isFinished,
-        isPlaying: controller.value.isPlaying,
-        show: showPlayButton,
-        onPressed: _playPause,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: showPlayButton ? 1.0 : 0.0,
+          child: ColoredBox(
+            color: Colors.transparent,
+            child: Center(
+              child: UnconstrainedBox(
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  // Always set the iconSize on the IconButton, not on the Icon itself:
+                  // https://github.com/flutter/flutter/issues/52980
+                  child: IconButton(
+                    iconSize: 32,
+                    padding: const EdgeInsets.all(12.0),
+                    icon: const Icon(Icons.replay_10, color: Colors.white),
+                    onPressed: _skipBack,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            if (_latestValue.isPlaying) {
+              if (_displayTapped) {
+                setState(() {
+                  notifier.hideStuff = true;
+                });
+              } else {
+                _cancelAndRestartTimer();
+              }
+            } else {
+              _playPause();
+
+              setState(() {
+                notifier.hideStuff = true;
+              });
+            }
+          },
+          child: CenterPlayButton(
+            backgroundColor: Colors.black54,
+            iconColor: Colors.white,
+            isFinished: isFinished,
+            isPlaying: controller.value.isPlaying,
+            show: showPlayButton,
+            onPressed: _playPause,
+          ),
+        ),
+        AnimatedOpacity(
+          duration: const Duration(milliseconds: 500),
+          opacity: showPlayButton ? 1.0 : 0.0,
+          child: ColoredBox(
+            color: Colors.transparent,
+            child: Center(
+              child: UnconstrainedBox(
+                child: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  // Always set the iconSize on the IconButton, not on the Icon itself:
+                  // https://github.com/flutter/flutter/issues/52980
+                  child: IconButton(
+                    iconSize: 32,
+                    padding: const EdgeInsets.all(12.0),
+                    icon: const Icon(Icons.forward_10, color: Colors.white),
+                    onPressed: _skipForward,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
+    // HACK: 2. Widget Changed to Row and added Buttons Completed
   }
 
   Future<void> _onSpeedButtonTap() async {
