@@ -354,6 +354,7 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
 // HACK: 2. Widget Changed to Row and added Buttons Started
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         AnimatedOpacity(
           duration: const Duration(milliseconds: 300),
