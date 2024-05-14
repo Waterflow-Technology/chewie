@@ -1,10 +1,19 @@
 import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/helpers/adaptive_controls.dart';
+import 'package:chewie/src/notifiers/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayerWithControls extends StatelessWidget {
-  const PlayerWithControls({Key? key}) : super(key: key);
+  const PlayerWithControls({Key? key, 
+  this.position =0.0,
+     this.showVideoID = false,
+     this.userId="",
+     }) : super(key: key);
+    final double position;
+  final bool showVideoID;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +40,7 @@ class PlayerWithControls extends StatelessWidget {
       ChewieController chewieController,
       BuildContext context,
     ) {
-      return 
-      Stack(
+      return Stack(
         children: <Widget>[
           if (chewieController.placeholder != null)
             chewieController.placeholder!,
@@ -49,9 +57,44 @@ class PlayerWithControls extends StatelessWidget {
               ),
             ),
           ),
-          const Text(
-                  "VID 12345",
-                  style: TextStyle(
+          if (chewieController.overlay != null) chewieController.overlay!,
+          if (Theme.of(context).platform != TargetPlatform.iOS)
+            Consumer<PlayerNotifier>(
+              builder: (
+                BuildContext context,
+                PlayerNotifier notifier,
+                Widget? widget,
+              ) =>
+                  Visibility(
+                visible: !notifier.hideStuff,
+                child: AnimatedOpacity(
+                  opacity: notifier.hideStuff ? 0.0 : 0.8,
+                  duration: const Duration(
+                    milliseconds: 250,
+                  ),
+                  child: const DecoratedBox(
+                    decoration: BoxDecoration(color: Colors.black54),
+                    child: SizedBox.expand(),
+                  ),
+                ),
+              ),
+            ),
+          if (!chewieController.isFullScreen)
+            buildControls(context, chewieController)
+          else
+          Stack(children: [
+            SafeArea(
+              bottom: false,
+              child: buildControls(context, chewieController),
+            ),
+            Visibility(
+              visible: showVideoID,
+              child: Positioned(
+                top: position,
+                right: position,
+                child: Text(
+                  "VID$userId",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
                     shadows: [
@@ -61,48 +104,11 @@ class PlayerWithControls extends StatelessWidget {
                     ],
                   ),
                 ),
-          // if (chewieController.overlay != null) chewieController.overlay!,
-          // if (Theme.of(context).platform != TargetPlatform.iOS)
-          //   Consumer<PlayerNotifier>(
-          //     builder: (
-          //       BuildContext context,
-          //       PlayerNotifier notifier,
-          //       Widget? widget,
-          //     ) =>
-          //         Visibility(
-          //       visible: !notifier.hideStuff,
-          //       child: AnimatedOpacity(
-          //         opacity: notifier.hideStuff ? 0.0 : 0.8,
-          //         duration: const Duration(
-          //           milliseconds: 250,
-          //         ),
-          //         child: const DecoratedBox(
-          //           decoration: BoxDecoration(color: Colors.black54),
-          //           child: SizedBox.expand(),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // if (!chewieController.isFullScreen)
-          //   buildControls(context, chewieController)
-          // else
-          //   SafeArea(
-          //     bottom: false,
-          //     child: buildControls(context, chewieController),
-          //   ),
-          
-          //  const Text(
-          //         "VIDEO 12345",
-          //         style: TextStyle(
-          //           color: Colors.white,
-          //           fontSize: 12,
-          //           shadows: [
-          //             Shadow(color: Colors.black),
-          //             Shadow(color: Colors.green),
-          //             Shadow(color: Colors.red),
-          //           ],
-          //         ),
-          //       ),
+              ),
+            ),
+                ],
+                )
+            
         ],
       );
     }
@@ -110,7 +116,8 @@ class PlayerWithControls extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Center(
-        child: SizedBox(
+        child: 
+        SizedBox(
           height: constraints.maxHeight,
           width: constraints.maxWidth,
           child: AspectRatio(
