@@ -29,12 +29,15 @@ class Chewie extends StatefulWidget {
     required this.controller,
      this.position =0.0,
      this.showVideoID = false,
+     this.userId ="",
   }) : super(key: key);
 
   /// The [ChewieController]
   final ChewieController controller;
   final double position;
   final bool showVideoID;
+  final String userId;
+  
 
   @override
   ChewieState createState() {
@@ -92,7 +95,8 @@ class ChewieState extends State<Chewie> {
       child: ChangeNotifierProvider<PlayerNotifier>.value(
         value: notifier,
         builder: (context, w) =>  PlayerWithControls(  position: widget.position,
-            showVideoID: widget.showVideoID,),
+            showVideoID: widget.showVideoID,userId: widget.userId
+            ,),
       ),
     );
   }
@@ -137,7 +141,8 @@ class ChewieState extends State<Chewie> {
         value: notifier,
         builder: (context, w) =>  PlayerWithControls(
           position: widget.position,
-            showVideoID: widget.showVideoID,
+            showVideoID: widget.showVideoID,userId: widget.userId
+            ,
         ),
       ),
     );
