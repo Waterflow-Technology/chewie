@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:chewie/src/chewie_player.dart';
@@ -51,6 +52,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
     position = 0;
     showVideoID = true;
     startLoop = true;
+    log("hello Chewie");
     randomVideoID();
     super.initState();
   }
