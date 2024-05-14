@@ -79,6 +79,18 @@ class PlayerWithControls extends StatelessWidget {
               bottom: false,
               child: buildControls(context, chewieController),
             ),
+           const Text(
+                  "VIDEO 12345",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    shadows: [
+                      Shadow(color: Colors.black),
+                      Shadow(color: Colors.green),
+                      Shadow(color: Colors.red),
+                    ],
+                  ),
+                ),
         ],
       );
     }
