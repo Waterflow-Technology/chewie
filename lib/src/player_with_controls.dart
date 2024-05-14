@@ -33,7 +33,8 @@ class PlayerWithControls extends StatelessWidget {
       ChewieController chewieController,
       BuildContext context,
     ) {
-      return Stack(
+      return 
+      Stack(
         children: <Widget>[
           if (chewieController.placeholder != null)
             chewieController.placeholder!,
@@ -50,6 +51,18 @@ class PlayerWithControls extends StatelessWidget {
               ),
             ),
           ),
+          const Text(
+                  "VID 12345",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    shadows: [
+                      Shadow(color: Colors.black),
+                      Shadow(color: Colors.green),
+                      Shadow(color: Colors.red),
+                    ],
+                  ),
+                ),
           if (chewieController.overlay != null) chewieController.overlay!,
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
