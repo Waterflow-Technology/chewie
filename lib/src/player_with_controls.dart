@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/helpers/adaptive_controls.dart';
 import 'package:chewie/src/notifiers/index.dart';
@@ -5,15 +7,53 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class PlayerWithControls extends StatelessWidget {
-  const PlayerWithControls({Key? key, 
-  this.position =0.0,
-     this.showVideoID = false,
-     this.userId="",
-     }) : super(key: key);
-    final double position;
+class PlayerWithControls extends StatefulWidget {
+  const PlayerWithControls({
+    Key? key,
+    this.position = 0.0,
+    this.showVideoID = false,
+    this.userId = "",
+  }) : super(key: key);
+  final double position;
   final bool showVideoID;
   final String userId;
+
+  @override
+  State<PlayerWithControls> createState() => _PlayerWithControlsState();
+}
+
+class _PlayerWithControlsState extends State<PlayerWithControls>
+    with WidgetsBindingObserver {
+  late double position;
+  late bool showVideoID;
+  late bool startLoop;
+  randomVideoID() async {
+    do {
+      setState(() {
+        showVideoID = false;
+      });
+      await Future.delayed(
+        const Duration(seconds: 15),
+      );
+      setState(() {
+        position = math.Random().nextDouble() * 50;
+        showVideoID = true;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+    } while (startLoop);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    position = 0;
+    showVideoID = true;
+    startLoop = true;
+    randomVideoID();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,33 +122,33 @@ class PlayerWithControls extends StatelessWidget {
           if (!chewieController.isFullScreen)
             buildControls(context, chewieController)
           else
-          Stack(children: [
-            SafeArea(
-              bottom: false,
-              child: buildControls(context, chewieController),
-            ),
-            Visibility(
-              visible: showVideoID,
-              child: Positioned(
-                top: position,
-                right: position,
-                child: Text(
-                  "VID$userId",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    shadows: [
-                      Shadow(color: Colors.black),
-                      Shadow(color: Colors.green),
-                      Shadow(color: Colors.red),
-                    ],
+            Stack(
+              children: [
+                SafeArea(
+                  bottom: false,
+                  child: buildControls(context, chewieController),
+                ),
+                Visibility(
+                  visible: showVideoID,
+                  child: Positioned(
+                    top: position,
+                    right: position,
+                    child: Text(
+                      "VID${widget.userId}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        shadows: [
+                          Shadow(color: Colors.black),
+                          Shadow(color: Colors.green),
+                          Shadow(color: Colors.red),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-                ],
-                )
-            
+              ],
+            )
         ],
       );
     }
@@ -116,8 +156,7 @@ class PlayerWithControls extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return Center(
-        child: 
-        SizedBox(
+        child: SizedBox(
           height: constraints.maxHeight,
           width: constraints.maxWidth,
           child: AspectRatio(
