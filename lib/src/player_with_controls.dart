@@ -33,10 +33,10 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
         showVideoID = false;
       });
       await Future.delayed(
-        const Duration(seconds: 15),
+        const Duration(seconds: 6),
       );
       setState(() {
-        position = math.Random().nextDouble() * 50;
+        position = math.Random().nextDouble() * 70;
         showVideoID = true;
       });
       await Future.delayed(
