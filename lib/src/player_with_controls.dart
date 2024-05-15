@@ -120,7 +120,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
               child: Column(
                 children: [
                   Text(
-                    "Time is $position",
+                    "Position is $position",
                     style: const TextStyle(
                       color: Colors.green,
                     ),
