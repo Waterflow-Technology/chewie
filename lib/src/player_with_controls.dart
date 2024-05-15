@@ -112,7 +112,17 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
                     ? 150
                     : 0,
               ),
-              child: chewieController.overlay!,
+              child: Column(
+                children: [
+                  Text(
+                    "Time is ${chewieController.videoPlayerController.value.position.inSeconds}",
+                    style: const TextStyle(
+                      color: Colors.green,
+                    ),
+                  ),
+                  chewieController.overlay!,
+                ],
+              ),
             ),
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
