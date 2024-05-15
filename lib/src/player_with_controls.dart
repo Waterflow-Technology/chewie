@@ -99,7 +99,24 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
               ),
             ),
           ),
-          if (chewieController.overlay != null) chewieController.overlay!,
+          if (chewieController.overlay != null && chewieController.isFullScreen)
+            Padding(
+              padding: EdgeInsets.only(
+                left: chewieController.videoPlayerController.value.position
+                                .inSeconds %
+                            15 ==
+                        0
+                    ? 150
+                    : 0,
+                top: chewieController.videoPlayerController.value.position
+                                .inSeconds %
+                            15 ==
+                        0
+                    ? 150
+                    : 0,
+              ),
+              child: chewieController.overlay!,
+            ),
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
               builder: (
