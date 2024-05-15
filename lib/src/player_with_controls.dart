@@ -99,18 +99,19 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
               ),
             ),
           ),
-          if (chewieController.overlay != null && chewieController.isFullScreen)
+          if (chewieController.overlay != null &&
+              !chewieController.isFullScreen)
             Padding(
               padding: EdgeInsets.only(
                 left: chewieController.videoPlayerController.value.position
                                 .inSeconds %
-                            15 ==
+                            10 ==
                         0
                     ? 150
                     : 0,
                 top: chewieController.videoPlayerController.value.position
                                 .inSeconds %
-                            15 ==
+                            10 ==
                         0
                     ? 150
                     : 0,
