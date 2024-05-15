@@ -22,27 +22,25 @@ class PlayerWithControls extends StatefulWidget {
 
 class _PlayerWithControlsState extends State<PlayerWithControls>
     with WidgetsBindingObserver {
-  late double position;
+  late double left;
+  late double top;
   late bool showVideoID;
   late bool startLoop;
   randomVideoID() async {
     do {
-      // setState(() {
-      //   showVideoID = false;
-      // });
       setState(() {
-        position = 0;
-        // showVideoID = true;
+        left = 0;
+        top = 100;
       });
       await Future.delayed(
-        const Duration(seconds: 6),
+        const Duration(seconds: 15),
       );
       setState(() {
-        position = 200;
-        // showVideoID = true;
+        left = 200;
+        top = 20;
       });
       await Future.delayed(
-        const Duration(seconds: 5),
+        const Duration(seconds: 10),
       );
     } while (startLoop);
   }
@@ -50,7 +48,8 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    position = 0;
+    left = 0;
+    top = 0;
     showVideoID = true;
     startLoop = true;
     randomVideoID();
@@ -102,25 +101,13 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
           if (chewieController.overlay != null)
             Padding(
               padding: EdgeInsets.only(
-                left: position,
-                // chewieController.videoPlayerController.value.position
-                //                 .inSeconds %
-                //             10 ==
-                //         0
-                //     ? 150
-                //     : 0,
-                top: position,
-                // chewieController.videoPlayerController.value.position
-                //                 .inSeconds %
-                //             10 ==
-                //         0
-                //     ? 150
-                //     : 0,
+                left: left,
+                top: top,
               ),
               child: Column(
                 children: [
                   Text(
-                    "Position is $position",
+                    "Position is l: $left, t: $top",
                     style: const TextStyle(
                       color: Colors.green,
                     ),
@@ -153,32 +140,9 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
           if (!chewieController.isFullScreen)
             buildControls(context, chewieController)
           else
-            Stack(
-              children: [
-                SafeArea(
-                  bottom: false,
-                  child: buildControls(context, chewieController),
-                ),
-                Visibility(
-                  visible: showVideoID,
-                  child: Positioned(
-                    top: position,
-                    right: position,
-                    child: Text(
-                      "VID${widget.userId}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        shadows: [
-                          Shadow(color: Colors.black),
-                          Shadow(color: Colors.green),
-                          Shadow(color: Colors.red),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SafeArea(
+              bottom: false,
+              child: buildControls(context, chewieController),
             )
         ],
       );
