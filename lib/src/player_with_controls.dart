@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/helpers/adaptive_controls.dart';
 import 'package:chewie/src/notifiers/index.dart';
@@ -29,15 +27,19 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
   late bool startLoop;
   randomVideoID() async {
     do {
+      // setState(() {
+      //   showVideoID = false;
+      // });
       setState(() {
-        showVideoID = false;
+        position = 0;
+        // showVideoID = true;
       });
       await Future.delayed(
         const Duration(seconds: 6),
       );
       setState(() {
-        position = math.Random().nextDouble() * 70;
-        showVideoID = true;
+        position = 200;
+        // showVideoID = true;
       });
       await Future.delayed(
         const Duration(seconds: 5),
@@ -51,6 +53,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
     position = 0;
     showVideoID = true;
     startLoop = true;
+    randomVideoID();
     super.initState();
   }
 
@@ -99,23 +102,25 @@ class _PlayerWithControlsState extends State<PlayerWithControls>
           if (chewieController.overlay != null)
             Padding(
               padding: EdgeInsets.only(
-                left: chewieController.videoPlayerController.value.position
-                                .inSeconds %
-                            10 ==
-                        0
-                    ? 150
-                    : 0,
-                top: chewieController.videoPlayerController.value.position
-                                .inSeconds %
-                            10 ==
-                        0
-                    ? 150
-                    : 0,
+                left: position,
+                // chewieController.videoPlayerController.value.position
+                //                 .inSeconds %
+                //             10 ==
+                //         0
+                //     ? 150
+                //     : 0,
+                top: position,
+                // chewieController.videoPlayerController.value.position
+                //                 .inSeconds %
+                //             10 ==
+                //         0
+                //     ? 150
+                //     : 0,
               ),
               child: Column(
                 children: [
                   Text(
-                    "Time is ${chewieController.videoPlayerController.value.position.inSeconds}",
+                    "Time is $position",
                     style: const TextStyle(
                       color: Colors.green,
                     ),
