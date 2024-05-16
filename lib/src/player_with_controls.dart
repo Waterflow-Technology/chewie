@@ -5,8 +5,68 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class PlayerWithControls extends StatelessWidget {
+class PlayerWithControls extends StatefulWidget {
   const PlayerWithControls({Key? key}) : super(key: key);
+
+  @override
+  State<PlayerWithControls> createState() => _PlayerWithControlsState();
+}
+
+class _PlayerWithControlsState extends State<PlayerWithControls> {
+  late double left;
+  late double top;
+  late double bottom;
+  late double right;
+  late bool startLoop;
+  randomVideoID() async {
+    do {
+      setState(() {
+        left = 0;
+        top = 100;
+        bottom = 0;
+        right = 0;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+      setState(() {
+        left = 150;
+        top = 0;
+        bottom = 0;
+        right = 0;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+      setState(() {
+        left = 0;
+        top = 0;
+        bottom = 100;
+        right = 0;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+      setState(() {
+        left = 0;
+        top = 0;
+        bottom = 0;
+        right = 150;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+    } while (startLoop);
+  }
+
+  @override
+  void initState() {
+    left = 0;
+    top = 0;
+    startLoop = true;
+    randomVideoID();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +110,16 @@ class PlayerWithControls extends StatelessWidget {
               ),
             ),
           ),
-          if (chewieController.overlay != null) chewieController.overlay!,
+          if (chewieController.overlay != null)
+            Padding(
+              padding: EdgeInsets.only(
+                left: left,
+                top: top,
+                bottom: bottom,
+                right: right,
+              ),
+              child: chewieController.overlay!,
+            ),
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
               builder: (
