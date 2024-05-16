@@ -15,22 +15,46 @@ class PlayerWithControls extends StatefulWidget {
 class _PlayerWithControlsState extends State<PlayerWithControls> {
   late double left;
   late double top;
+  late double bottom;
+  late double right;
   late bool startLoop;
   randomVideoID() async {
     do {
       setState(() {
         left = 0;
         top = 100;
+        bottom = 0;
+        right = 0;
       });
       await Future.delayed(
-        const Duration(seconds: 15),
+        const Duration(seconds: 5),
       );
       setState(() {
         left = 150;
         top = 0;
+        bottom = 0;
+        right = 0;
       });
       await Future.delayed(
-        const Duration(seconds: 10),
+        const Duration(seconds: 5),
+      );
+      setState(() {
+        left = 0;
+        top = 0;
+        bottom = 100;
+        right = 0;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
+      );
+      setState(() {
+        left = 0;
+        top = 0;
+        bottom = 0;
+        right = 150;
+      });
+      await Future.delayed(
+        const Duration(seconds: 5),
       );
     } while (startLoop);
   }
@@ -88,7 +112,12 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
           ),
           if (chewieController.overlay != null)
             Padding(
-              padding: EdgeInsets.only(left: left, top: top),
+              padding: EdgeInsets.only(
+                left: left,
+                top: top,
+                bottom: bottom,
+                right: right,
+              ),
               child: chewieController.overlay!,
             ),
           if (Theme.of(context).platform != TargetPlatform.iOS)
