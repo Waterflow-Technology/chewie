@@ -18,6 +18,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
   late double bottom;
   late double right;
   late bool startLoop;
+  int randomizationTime = 5;
   randomVideoID() async {
     do {
       setState(() {
@@ -27,7 +28,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
         right = 0;
       });
       await Future.delayed(
-        const Duration(seconds: 5),
+        Duration(seconds: randomizationTime),
       );
       setState(() {
         left = 150;
@@ -36,7 +37,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
         right = 0;
       });
       await Future.delayed(
-        const Duration(seconds: 5),
+        Duration(seconds: randomizationTime),
       );
       setState(() {
         left = 0;
@@ -45,7 +46,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
         right = 0;
       });
       await Future.delayed(
-        const Duration(seconds: 5),
+        Duration(seconds: randomizationTime),
       );
       setState(() {
         left = 0;
@@ -54,7 +55,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
         right = 150;
       });
       await Future.delayed(
-        const Duration(seconds: 5),
+        Duration(seconds: randomizationTime),
       );
     } while (startLoop);
   }
